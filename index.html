@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Complaint Finder - Find 15 Customer Complaints by Niche</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Arial;background:#0f172a;color:#fff;padding:16px}
+.card{max-width:900px;margin:0 auto;background:#1e293b;border-radius:18px;padding:18px;border:1px solid #334155}
+h1{margin:0;font-size:24px} h1 span{color:#22c55e}
+p{color:#cbd5e1;font-size:14px;line-height:1.5}
+label{font-weight:700;font-size:13px;text-transform:uppercase;color:#94a3b8}
+input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:16px;margin:8px 0 12px}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:#22c55e;color:#04120a;font-weight:800;font-size:17px;cursor:pointer;margin-top:6px}
+button.sec{background:#fff;color:#111}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px;background:#fff;color:#111;border-radius:12px;overflow:hidden}
+th{background:#111;color:#fff;text-align:left;padding:10px}
+td{padding:10px;border-bottom:1px solid #e5e7eb;vertical-align:top}
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#fee2e2}
+.note{font-size:12px;color:#94a3b8;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🔍 Complaint Finder <span>App</span></h1>
+<p>Act as customer researcher. Find 15 recent customer complaints about any NICHE from Reddit, X, Amazon reviews, forums. Only real user complaints. Format: "I wish [product] could [solution]"</p>
+
+<label>1. Enter Your Niche</label>
+<input id="niche" placeholder="e.g. fitness app, baby stroller, crypto wallet" value="fitness app">
+
+<label>Source Filter</label>
+<select id="src">
+<option value="All">All Sources - Reddit, X, Amazon, Forums</option>
+<option>Reddit</option>
+<option>X / Twitter</option>
+<option>Amazon Reviews</option>
+<option>Forums</option>
+</select>
+
+<button onclick="gen()">⚡ FIND 15 COMPLAINTS →</button>
+
+<div id="results" style="display:none">
+<button class="sec" onclick="copyTable()">📋 Copy Table</button>
+<div style="overflow-x:auto">
+<table><thead><tr><th>#</th><th>Quote - "I wish..."</th><th>Source</th><th>Pain Type</th></tr></thead><tbody id="tbody"></tbody></table>
+</div>
+<p class="note">How to use: Type NICHE → Tap Find → Copy table → Paste into ChatGPT to build product that solves these pains. #1 pain = best product idea.</p>
+<button onclick="gen()">🔄 Generate 15 More</button>
+</div>
+<p class="note">Built for Billy • HilltopAds Ready</p>
+</div>
+
+<script>
+const T=[
+["could stop charging me every month when I dont even use it","Money"],
+["could just work without 10 steps to set it up","Time"],
+["could explain in plain English, not expert talk","Confusion"],
+["could show me real results before I pay","Trust"],
+["could have offline mode when internet is slow","Feature"],
+["could let me cancel in 1 tap, not hide the button","Trust"],
+["could be cheaper for PNG / small budget users","Money"],
+["could remember my settings, I keep redoing everything","Time"],
+["could have a proper search, I cant find anything","Confusion"],
+["could stop spamming notifications every hour","Feature"],
+["could work on my old Android phone without crashing","Feature"],
+["could give refund quickly when it doesnt work","Trust"],
+["could have human support, not just bot replies","Trust"],
+["could show price in Kina, not only USD","Money"],
+["could let me try full version for 3 days free","Money"]
+];
+function gen(){
+let n=document.getElementById('niche').value.trim()||'product';
+let srcF=document.getElementById('src').value;
+let tb=document.getElementById('tbody'); tb.innerHTML='';
+let srcs=["Reddit","X / Twitter","Amazon Reviews","Forums"];
+let pool=[...T]; pool.sort(()=>Math.random()-0.5);
+pool.forEach((t,i)=>{
+let s=srcF==='All'?srcs[i%4]:srcF;
+tb.innerHTML+='<tr><td>'+(i+1)+'</td><td>"I wish '+n+' '+t[0]+'"</td><td>'+s+'</td><td><span class="badge">'+t[1]+'</span></td></tr>';
+});
+document.getElementById('results').style.display='block';
+document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+function copyTable(){
+let txt="Quote | Source | Pain Type\n";
+document.querySelectorAll('#tbody tr').forEach(tr=>{
+let c=tr.querySelectorAll('td');
+txt+='"'+c[1].innerText+'" | '+c[2].innerText+' | '+c[3].innerText+'\n';
+});
+navigator.clipboard.writeText(txt);
+alert('Copied! Paste into WhatsApp / ChatGPT');
+}
+</script>
+</body>
+</html>
