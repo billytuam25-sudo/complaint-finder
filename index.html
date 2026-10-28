@@ -91,6 +91,31 @@ txt+='"'+c[1].innerText+'" | '+c[2].innerText+' | '+c[3].innerText+'\n';
 navigator.clipboard.writeText(txt);
 alert('Copied! Paste into WhatsApp / ChatGPT');
 }
-</script>
-</body>
+// CELLMONI ID CHECK
+let freeSearches = parseInt(localStorage.getItem("freeSearches") || "0");
+let paidSearches = parseInt(localStorage.getItem("paidSearches") || "0");
+let usedTxnIds = JSON.parse(localStorage.getItem("usedTxnIds") || "[]");
+function checkCellMoni(){
+  let txn = document.getElementById("txnInput").value.trim().toUpperCase();
+  let msg = document.getElementById("txnMessage");
+  if(txn.length < 6){ msg.innerText = "Paste full Transaction ID from CellMoni SMS"; return; }
+  if(usedTxnIds.includes(txn)){ msg.innerText = "This ID already used."; return; }
+  usedTxnIds.push(txn);
+  localStorage.setItem("usedTxnIds", JSON.stringify(usedTxnIds));
+  paidSearches += 5;
+  localStorage.setItem("paidSearches", paidSearches);
+  msg.style.color = "green";
+  msg.innerText = "✅ Unlocked! You have 5 searches.";
+  setTimeout(()=>{ document.getElementById("paywall").style.display="none"; }, 2000);
+}</script>
+<!-- CELLMONI PAYWALL - ADDED BY BILLY -->
+<div id="paywall" style="display:none; max-width:900px; margin:16px auto; background:#fff5f5; border:2px solid #e60000; padding:18px; border-radius:18px; color:#000;">
+<h3 style="margin:0; color:#000;">🔒 You used your 3 FREE searches</h3>
+<p style="color:#000;">Unlock 5 more searches - <b>K5 only</b></p>
+<p style="color:#000;"><b>Step 1:</b> Pay CellMoni Dial *888# > Send Money > <b>70883797</b> > K5 Name: Billy</p>
+<p style="color:#000;"><b>Step 2:</b> Copy Transaction ID from your CellMoni SMS</p>
+<input id="txnInput" type="text" placeholder="Paste CellMoni Transaction ID here" style="width:100%; padding:14px; font-size:16px; border:1px solid #ccc; border-radius:12px; background:#fff; color:#000;" />
+<button onclick="checkCellMoni()" style="width:100%; padding:14px; background:#e60000; color:white; font-size:16px; border:none; border-radius:12px; margin-top:10px;">Unlock 5 Searches</button>
+<p id="txnMessage" style="color:red;"></p>
+</div></body>
 </html>
