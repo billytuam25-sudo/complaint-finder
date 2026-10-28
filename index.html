@@ -69,7 +69,23 @@ const T=[
 ["could show price in Kina, not only USD","Money"],
 ["could let me try full version for 3 days free","Money"]
 ];
-function gen(){
+function gen(){// === PAYWALL CHECK - ADDED BY BILLY ===
+let free = parseInt(localStorage.getItem("freeSearches") || "0");
+let paid = parseInt(localStorage.getItem("paidSearches") || "0");
+if (free >= 3 && paid <= 0) {
+  document.getElementById("paywall").style.display = "block";
+  document.getElementById("paywall").scrollIntoView({behavior:'smooth'});
+  alert("You used your 3 FREE searches. Pay K5 CellMoni to 70883797 to unlock 5 more.");
+  return;
+}
+if (free < 3) {
+  free++;
+  localStorage.setItem("freeSearches", free);
+} else {
+  paid--;
+  localStorage.setItem("paidSearches", paid);
+}
+// === END PAYWALL CHECK ===
 let n=document.getElementById('niche').value.trim()||'product';
 let srcF=document.getElementById('src').value;
 let tb=document.getElementById('tbody'); tb.innerHTML='';
