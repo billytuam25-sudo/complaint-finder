@@ -69,7 +69,9 @@ const T=[
 ["could show price in Kina, not only USD","Money"],
 ["could let me try full version for 3 days free","Money"]
 ];
-function gen(){// === PAYWALL CHECK - ADDED BY BILLY ===
+function hashCode(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
+let _seed=1;
+function sRand(){_seed=(_seed*1664525+1013904223)>>>0;return _seed/4294967296;}function gen(){// === PAYWALL CHECK - ADDED BY BILLY ===
 let free = parseInt(localStorage.getItem("freeSearches") || "0");
 let paid = parseInt(localStorage.getItem("paidSearches") || "0");
 if (free >= 3 && paid <= 0) {
@@ -90,7 +92,9 @@ let n=document.getElementById('niche').value.trim()||'product';
 let srcF=document.getElementById('src').value;
 let tb=document.getElementById('tbody'); tb.innerHTML='';
 let srcs=["Reddit","X / Twitter","Amazon Reviews","Forums"];
-let pool=[...T]; pool.sort(()=>Math.random()-0.5);
+_seed=hashCode(n+"|"+srcF);
+let pool= [...T]; pool.sort(()=>sRand()-0.5);
+
 pool.forEach((t,i)=>{
 let s=srcF==='All'?srcs[i%4]:srcF;
 tb.innerHTML+='<tr><td>'+(i+1)+'</td><td>"I wish '+n+' '+t[0]+'"</td><td>'+s+'</td><td><span class="badge">'+t[1]+'</span></td></tr>';
